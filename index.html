@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Results Contadores Associados</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --navy: #0a1f44;
+      --navy-mid: #113366;
+      --blue: #1a6bb5;
+      --blue-light: #3a9bd5;
+      --blue-pale: #d6eaf8;
+      --white: #ffffff;
+      --gray: #f4f7fb;
+      --text: #1c2b3a;
+      --text-light: #5a7080;
+      --accent: #c8a84b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      color: var(--text);
+      background: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 1000;
+      background: rgba(10,31,68,0.97);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+      height: 70px;
+      border-bottom: 1px solid rgba(58,155,213,0.25);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 14px; text-decoration: none;
+    }
+    .nav-logo-circle {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: linear-gradient(135deg, #3a9bd5 0%, #1a6bb5 50%, #0a1f44 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; font-weight: 700; color: white;
+      box-shadow: 0 0 14px rgba(58,155,213,0.5);
+      letter-spacing: -1px;
+    }
+    .nav-logo-text { line-height: 1.1; }
+    .nav-logo-text span:first-child {
+      display: block; font-family: 'Jost', sans-serif;
+      font-size: 15px; font-weight: 600; color: white; letter-spacing: 3px;
+    }
+    .nav-logo-text span:last-child {
+      display: block; font-size: 10px; color: var(--blue-light);
+      letter-spacing: 2px; text-transform: uppercase; font-weight: 300;
+    }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      color: rgba(255,255,255,0.8); text-decoration: none;
+      font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase;
+      font-weight: 400; transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--blue-light); }
+    .nav-cta {
+      background: var(--blue); color: white; border: none;
+      padding: 9px 22px; border-radius: 3px; font-size: 12px;
+      letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;
+      font-family: 'Jost', sans-serif; font-weight: 500;
+      transition: background 0.3s; text-decoration: none;
+    }
+    .nav-cta:hover { background: var(--blue-light); }
+
+    /* hamburger */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { width: 24px; height: 2px; background: white; transition: 0.3s; }
+
+    /* ─── HERO ─── */
+    #inicio {
+      min-height: 100vh;
+      background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 55%, var(--blue) 100%);
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 120px 5% 80px;
+      position: relative; overflow: hidden;
+    }
+    #inicio::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%233a9bd5' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.4;
+    }
+    .hero-content { position: relative; max-width: 780px; }
+    .hero-badge {
+      display: inline-block;
+      border: 1px solid rgba(58,155,213,0.5);
+      color: var(--blue-light); font-size: 11px;
+      letter-spacing: 3px; text-transform: uppercase;
+      padding: 6px 18px; border-radius: 30px; margin-bottom: 28px;
+      background: rgba(58,155,213,0.08);
+    }
+    .hero-logo-circle {
+      width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 28px;
+      background: linear-gradient(135deg, #5ab4e8 0%, #1a6bb5 50%, #0a1f44 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 52px; font-weight: 700; color: white;
+      box-shadow: 0 0 40px rgba(58,155,213,0.4), 0 0 80px rgba(58,155,213,0.15);
+      animation: pulse 3s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 40px rgba(58,155,213,0.4), 0 0 80px rgba(58,155,213,0.15); }
+      50% { box-shadow: 0 0 60px rgba(58,155,213,0.6), 0 0 100px rgba(58,155,213,0.25); }
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(38px, 7vw, 72px);
+      font-weight: 600; color: white; line-height: 1.05;
+      letter-spacing: -1px; margin-bottom: 8px;
+    }
+    .hero-subtitle {
+      font-size: 13px; letter-spacing: 5px; text-transform: uppercase;
+      color: var(--blue-light); margin-bottom: 22px; font-weight: 300;
+    }
+    .hero-desc {
+      font-size: 17px; color: rgba(255,255,255,0.75); line-height: 1.7;
+      max-width: 580px; margin: 0 auto 36px; font-weight: 300;
+    }
+    .hero-stats {
+      display: flex; justify-content: center; gap: 48px; margin-bottom: 44px;
+      flex-wrap: wrap;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat strong {
+      display: block; font-family: 'Cormorant Garamond', serif;
+      font-size: 36px; color: white; font-weight: 600; line-height: 1;
+    }
+    .hero-stat span { font-size: 12px; color: var(--blue-light); letter-spacing: 2px; text-transform: uppercase; }
+    .hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--blue); color: white; text-decoration: none;
+      padding: 14px 34px; border-radius: 3px; font-size: 13px;
+      letter-spacing: 2px; text-transform: uppercase; font-weight: 500;
+      transition: all 0.3s; border: 2px solid var(--blue);
+    }
+    .btn-primary:hover { background: var(--blue-light); border-color: var(--blue-light); transform: translateY(-2px); }
+    .btn-outline {
+      background: transparent; color: white; text-decoration: none;
+      padding: 14px 34px; border-radius: 3px; font-size: 13px;
+      letter-spacing: 2px; text-transform: uppercase; font-weight: 500;
+      transition: all 0.3s; border: 2px solid rgba(255,255,255,0.4);
+    }
+    .btn-outline:hover { border-color: white; background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+
+    /* ─── SECTIONS COMMON ─── */
+    section { padding: 90px 5%; }
+    .section-label {
+      display: inline-block; font-size: 11px; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--blue); margin-bottom: 12px;
+      font-weight: 500;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(30px, 4vw, 48px); font-weight: 600;
+      color: var(--navy); line-height: 1.1; margin-bottom: 18px;
+    }
+    .section-title.light { color: white; }
+    .section-desc { font-size: 16px; color: var(--text-light); line-height: 1.7; max-width: 600px; }
+    .section-desc.light { color: rgba(255,255,255,0.75); }
+    .divider {
+      width: 48px; height: 3px; background: linear-gradient(90deg, var(--blue), var(--blue-light));
+      margin: 18px 0 28px; border-radius: 2px;
+    }
+
+    /* ─── QUEM SOMOS ─── */
+    #quem-somos { background: var(--gray); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+      align-items: center; max-width: 1100px; margin: 0 auto;
+    }
+    .about-visual {
+      position: relative;
+    }
+    .about-card-main {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+      border-radius: 8px; padding: 48px 40px; color: white;
+      position: relative; overflow: hidden;
+    }
+    .about-card-main::before {
+      content: '';
+      position: absolute; top: -40px; right: -40px;
+      width: 180px; height: 180px; border-radius: 50%;
+      background: rgba(58,155,213,0.12);
+    }
+    .about-card-main::after {
+      content: '';
+      position: absolute; bottom: -30px; left: -30px;
+      width: 120px; height: 120px; border-radius: 50%;
+      background: rgba(58,155,213,0.08);
+    }
+    .about-year {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 80px; font-weight: 700; color: rgba(58,155,213,0.25);
+      line-height: 1; margin-bottom: -10px;
+    }
+    .about-founded { font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: var(--blue-light); margin-bottom: 20px; }
+    .about-card-main p { font-size: 16px; line-height: 1.7; color: rgba(255,255,255,0.85); font-weight: 300; }
+    .about-badge {
+      position: absolute; bottom: -20px; right: 32px;
+      background: var(--accent); color: var(--navy);
+      padding: 12px 24px; border-radius: 4px;
+      font-size: 12px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600;
+    }
+    .about-text { padding-top: 20px; }
+    .about-features { margin-top: 32px; display: flex; flex-direction: column; gap: 20px; }
+    .about-feature { display: flex; gap: 16px; align-items: flex-start; }
+    .about-feature-icon {
+      width: 44px; height: 44px; min-width: 44px;
+      background: var(--blue-pale); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    .about-feature h4 { font-size: 15px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+    .about-feature p { font-size: 14px; color: var(--text-light); line-height: 1.5; }
+
+    /* ─── EQUIPE ─── */
+    #equipe { background: white; }
+    .team-header { text-align: center; max-width: 600px; margin: 0 auto 56px; }
+    .team-header .divider { margin: 18px auto 28px; }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 24px; max-width: 1100px; margin: 0 auto;
+    }
+    .team-card {
+      background: var(--gray); border-radius: 8px; padding: 32px 24px;
+      text-align: center; transition: all 0.3s;
+      border: 1px solid transparent;
+    }
+    .team-card:hover {
+      border-color: var(--blue-light);
+      box-shadow: 0 8px 32px rgba(26,107,181,0.12);
+      transform: translateY(-4px);
+    }
+    .team-avatar {
+      width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 16px;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--navy) 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px; font-weight: 700; color: white;
+    }
+    .team-card h3 { font-size: 15px; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+    .team-card .role { font-size: 12px; color: var(--blue); letter-spacing: 1px; text-transform: uppercase; font-weight: 500; }
+    .team-founder {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+      border-color: transparent;
+    }
+    .team-founder h3, .team-founder .role { color: white; }
+    .team-founder .role { color: var(--blue-light); }
+    .team-founder .team-avatar {
+      background: linear-gradient(135deg, var(--blue-light), var(--blue));
+      width: 88px; height: 88px; font-size: 32px;
+      box-shadow: 0 0 24px rgba(58,155,213,0.4);
+    }
+    .team-founder .founder-tag {
+      display: inline-block; margin-top: 10px;
+      background: rgba(58,155,213,0.2); color: var(--blue-light);
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 20px;
+    }
+
+    /* ─── SERVIÇOS ─── */
+    #servicos {
+      background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 100%);
+    }
+    .services-header { text-align: center; max-width: 600px; margin: 0 auto 56px; }
+    .services-header .divider { margin: 18px auto 28px; background: linear-gradient(90deg, var(--blue-light), #5ab4e8); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px; max-width: 1100px; margin: 0 auto 32px;
+    }
+    .service-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(58,155,213,0.2);
+      border-radius: 8px; padding: 32px 28px;
+      transition: all 0.3s;
+    }
+    .service-card:hover {
+      background: rgba(58,155,213,0.1);
+      border-color: rgba(58,155,213,0.5);
+      transform: translateY(-4px);
+    }
+    .service-icon { font-size: 32px; margin-bottom: 16px; }
+    .service-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px; color: white; font-weight: 600; margin-bottom: 10px;
+    }
+    .service-card p { font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.6; }
+    .service-highlight {
+      background: linear-gradient(135deg, rgba(200,168,75,0.15), rgba(200,168,75,0.05));
+      border: 1px solid rgba(200,168,75,0.5);
+      border-radius: 12px; padding: 32px 36px;
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; gap: 24px;
+      flex-wrap: wrap;
+    }
+    .service-highlight-badge {
+      background: var(--accent); color: var(--navy);
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      padding: 6px 14px; border-radius: 3px; font-weight: 700;
+      white-space: nowrap;
+    }
+    .service-highlight-text h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; color: white; font-weight: 600; margin-bottom: 6px;
+    }
+    .service-highlight-text p { font-size: 14px; color: rgba(255,255,255,0.7); }
+
+    /* ─── CONTRATE ─── */
+    #contrate { background: var(--gray); }
+    .contrate-wrapper { max-width: 760px; margin: 0 auto; }
+    .contrate-header { text-align: center; margin-bottom: 48px; }
+    .contrate-header .divider { margin: 18px auto 28px; }
+    .form-card {
+      background: white; border-radius: 12px;
+      box-shadow: 0 8px 48px rgba(10,31,68,0.1);
+      padding: 48px 48px;
+      border-top: 4px solid var(--blue);
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block; font-size: 12px; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--text-light); margin-bottom: 8px; font-weight: 500;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%; padding: 12px 16px;
+      border: 1.5px solid #dde4ee; border-radius: 6px;
+      font-family: 'Jost', sans-serif; font-size: 15px;
+      color: var(--text); background: var(--gray);
+      transition: border-color 0.3s, box-shadow 0.3s;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(26,107,181,0.1);
+      background: white;
+    }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    .form-submit {
+      width: 100%; background: var(--blue); color: white;
+      border: none; padding: 16px; border-radius: 6px;
+      font-family: 'Jost', sans-serif; font-size: 14px;
+      letter-spacing: 2px; text-transform: uppercase; font-weight: 600;
+      cursor: pointer; transition: all 0.3s; margin-top: 8px;
+    }
+    .form-submit:hover { background: var(--navy); transform: translateY(-1px); }
+    .form-contact-alt {
+      text-align: center; margin-top: 28px;
+      font-size: 14px; color: var(--text-light);
+    }
+    .form-contact-alt a { color: var(--blue); text-decoration: none; font-weight: 500; }
+    .form-contact-alt a:hover { text-decoration: underline; }
+    .wa-links { display: flex; gap: 12px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
+    .wa-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #25d366; color: white; text-decoration: none;
+      padding: 10px 20px; border-radius: 6px; font-size: 13px;
+      font-weight: 500; transition: background 0.3s;
+    }
+    .wa-btn:hover { background: #1ebe5d; }
+
+    /* success message */
+    .form-success {
+      display: none; text-align: center; padding: 48px 24px;
+    }
+    .form-success-icon { font-size: 56px; margin-bottom: 16px; }
+    .form-success h3 { font-family: 'Cormorant Garamond', serif; font-size: 28px; color: var(--navy); margin-bottom: 10px; }
+    .form-success p { color: var(--text-light); font-size: 15px; }
+
+    /* ─── CONTATO ─── */
+    #contato {
+      background: var(--navy);
+      text-align: center;
+    }
+    .contato-inner { max-width: 700px; margin: 0 auto; }
+    .contato-inner .divider { margin: 18px auto 28px; background: linear-gradient(90deg, var(--blue-light), #5ab4e8); }
+    .contato-grid {
+      display: flex; justify-content: center; gap: 40px;
+      flex-wrap: wrap; margin-top: 44px;
+    }
+    .contato-item { text-align: center; }
+    .contato-item-icon {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: rgba(58,155,213,0.15);
+      border: 1px solid rgba(58,155,213,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin: 0 auto 14px;
+    }
+    .contato-item h4 { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--blue-light); margin-bottom: 6px; }
+    .contato-item p, .contato-item a {
+      color: rgba(255,255,255,0.8); font-size: 15px;
+      text-decoration: none; line-height: 1.6;
+    }
+    .contato-item a:hover { color: var(--blue-light); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #06132b; padding: 28px 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+      border-top: 1px solid rgba(58,155,213,0.15);
+    }
+    footer p { color: rgba(255,255,255,0.4); font-size: 13px; }
+    footer a { color: var(--blue-light); text-decoration: none; font-size: 13px; }
+
+    /* ─── MOBILE ─── */
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .form-row { grid-template-columns: 1fr; }
+      .form-card { padding: 32px 24px; }
+      .hero-stats { gap: 28px; }
+      nav { padding: 0 4%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#inicio" class="nav-logo">
+    <div class="nav-logo-circle">R</div>
+    <div class="nav-logo-text">
+      <span>RESULTS</span>
+      <span>Contadores Associados</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#quem-somos">Quem Somos</a></li>
+    <li><a href="#equipe">Equipe</a></li>
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+  <a href="#contrate" class="nav-cta">Contrate</a>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="inicio">
+  <div class="hero-content">
+    <div class="hero-badge">Desde 2000 · Atendimento Nacional</div>
+    <div class="hero-logo-circle">R</div>
+    <p class="hero-subtitle">Results Contadores Associados</p>
+    <h1 class="hero-title">Contabilidade<br>com Resultados<br>Reais</h1>
+    <p class="hero-desc">
+      Mais de 24 anos de experiência cuidando da saúde financeira e fiscal de empresas em todo o Brasil — de forma 100% online.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <strong>+24</strong>
+        <span>Anos de mercado</span>
+      </div>
+      <div class="hero-stat">
+        <strong>100%</strong>
+        <span>Online</span>
+      </div>
+      <div class="hero-stat">
+        <strong>BR</strong>
+        <span>Todo o Brasil</span>
+      </div>
+    </div>
+    <div class="hero-btns">
+      <a href="#contrate" class="btn-primary">Contratar Agora</a>
+      <a href="#servicos" class="btn-outline">Nossos Serviços</a>
+    </div>
+  </div>
+</section>
+
+<!-- QUEM SOMOS -->
+<section id="quem-somos">
+  <div class="about-grid">
+    <div class="about-visual">
+      <div class="about-card-main">
+        <div class="about-year">2000</div>
+        <div class="about-founded">Fundada em Junho</div>
+        <p>
+          A Results Contadores Associados nasceu em Santa Rita do Sapucaí, no sul de Minas Gerais, com a missão de oferecer serviços contábeis de excelência. Ao longo dos anos, expandimos nossa atuação para todo o território nacional por meio de atendimento 100% digital.
+        </p>
+      </div>
+      <div class="about-badge">Santa Rita do Sapucaí · MG</div>
+    </div>
+    <div class="about-text">
+      <span class="section-label">Nossa História</span>
+      <h2 class="section-title">Mais de duas décadas de confiança</h2>
+      <div class="divider"></div>
+      <p class="section-desc">
+        Com uma equipe especializada e dedicada, a Results oferece soluções contábeis, fiscais e trabalhistas para empresas de todos os portes e segmentos, com agilidade e precisão.
+      </p>
+      <div class="about-features">
+        <div class="about-feature">
+          <div class="about-feature-icon">🌐</div>
+          <div>
+            <h4>Atendimento Nacional Online</h4>
+            <p>Atendemos empresas em qualquer estado do Brasil de forma totalmente remota e segura.</p>
+          </div>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature-icon">⚖️</div>
+          <div>
+            <h4>Especialistas em MG</h4>
+            <p>Especialização nos Regimes Especiais de Minas Gerais, diferencial competitivo para nossos clientes mineiros.</p>
+          </div>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature-icon">🏆</div>
+          <div>
+            <h4>Experiência Comprovada</h4>
+            <p>Mais de 24 anos no mercado com equipe qualificada em todas as áreas contábeis e fiscais.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EQUIPE -->
+<section id="equipe">
+  <div class="team-header">
+    <span class="section-label">Nosso Time</span>
+    <h2 class="section-title">Conheça a Equipe Results</h2>
+    <div class="divider"></div>
+    <p class="section-desc">Profissionais comprometidos com a excelência e o sucesso dos nossos clientes.</p>
+  </div>
+  <div class="team-grid">
+    <div class="team-card team-founder">
+      <div class="team-avatar">D</div>
+      <h3>Denilson de Souza</h3>
+      <div class="role">Fundador & Diretor</div>
+      <div class="founder-tag">⭐ Fundador</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">A</div>
+      <h3>Andreia de Souza Rosa</h3>
+      <div class="role">Documentação, Depto. Legal e Financeiro</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">J</div>
+      <h3>José Benedito Eduardo</h3>
+      <div class="role">Responsável Setor Contábil</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">C</div>
+      <h3>Clarice</h3>
+      <div class="role">Auxiliar Contábil</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">J</div>
+      <h3>João Pedro Souza</h3>
+      <div class="role">Auxiliar Contábil</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">M</div>
+      <h3>Marcelo Carneiro</h3>
+      <div class="role">Responsável Depto. Fiscal</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">T</div>
+      <h3>Tânia</h3>
+      <div class="role">Auxiliar Fiscal</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">F</div>
+      <h3>Fábio Henrique</h3>
+      <div class="role">Responsável Depto. Pessoal</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">A</div>
+      <h3>André</h3>
+      <div class="role">Analista Sênior DP</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">D</div>
+      <h3>Débora</h3>
+      <div class="role">Auxiliar DP</div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section id="servicos">
+  <div class="services-header">
+    <span class="section-label" style="color:var(--blue-light)">O Que Fazemos</span>
+    <h2 class="section-title light">Nossos Serviços</h2>
+    <div class="divider"></div>
+    <p class="section-desc light">Soluções completas para abertura, gestão e crescimento da sua empresa.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">🏢</div>
+      <h3>Abertura de Empresa</h3>
+      <p>Assessoria completa para abrir sua empresa com segurança, agilidade e dentro da legalidade.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📝</div>
+      <h3>Alteração de Contrato</h3>
+      <p>Alterações societárias, mudança de endereço, inclusão de sócios e muito mais.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🔒</div>
+      <h3>Encerramento de Empresa</h3>
+      <p>Processo seguro e correto para encerrar sua empresa junto a todos os órgãos competentes.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📊</div>
+      <h3>Simples Nacional</h3>
+      <p>Contabilidade especializada para empresas optantes pelo Simples Nacional.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📈</div>
+      <h3>Lucro Presumido e Real</h3>
+      <p>Gestão contábil para empresas tributadas pelo Lucro Presumido ou Lucro Real.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🧭</div>
+      <h3>Planejamento Tributário</h3>
+      <p>Estratégias legais para reduzir a carga tributária e aumentar a lucratividade do seu negócio.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🌐</div>
+      <h3>RADAR</h3>
+      <p>Habilitação e gestão do RADAR para empresas que desejam realizar operações de comércio exterior.</p>
+    </div>
+  </div>
+
+  <!-- Destaque Especial -->
+  <div class="service-highlight">
+    <div>
+      <div class="service-highlight-badge">⭐ Diferencial Exclusivo</div>
+    </div>
+    <div class="service-highlight-text">
+      <h3>Especialistas em Regimes Especiais de Minas Gerais</h3>
+      <p>Conhecimento aprofundado nos regimes especiais do Estado de MG, gerando benefícios fiscais reais para nossos clientes mineiros.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTRATE -->
+<section id="contrate">
+  <div class="contrate-wrapper">
+    <div class="contrate-header">
+      <span class="section-label">Fale Conosco</span>
+      <h2 class="section-title">Contrate a Results</h2>
+      <div class="divider"></div>
+      <p class="section-desc">Preencha o formulário abaixo e entraremos em contato para apresentar a melhor solução para sua empresa.</p>
+    </div>
+    <div class="form-card">
+      <div id="form-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nome completo *</label>
+            <input type="text" id="f-nome" placeholder="Seu nome" required />
+          </div>
+          <div class="form-group">
+            <label>Empresa</label>
+            <input type="text" id="f-empresa" placeholder="Nome da empresa" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Telefone / WhatsApp *</label>
+            <input type="tel" id="f-tel" placeholder="(XX) XXXXX-XXXX" required />
+          </div>
+          <div class="form-group">
+            <label>E-mail *</label>
+            <input type="email" id="f-email" placeholder="seu@email.com" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Serviço de interesse</label>
+          <select id="f-servico">
+            <option value="">Selecione um serviço...</option>
+            <option>Abertura de Empresa</option>
+            <option>Alteração de Contrato</option>
+            <option>Encerramento de Empresa</option>
+            <option>Contabilidade – Simples Nacional</option>
+            <option>Contabilidade – Lucro Presumido / Real</option>
+            <option>Planejamento Tributário</option>
+            <option>Regimes Especiais MG</option>
+            <option>RADAR – Comércio Exterior</option>
+            <option>Outro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Mensagem</label>
+          <textarea id="f-msg" placeholder="Conte um pouco sobre sua empresa e necessidade..."></textarea>
+        </div>
+        <button class="form-submit" onclick="enviarFormulario()">Enviar e Aguardar Contato</button>
+      </div>
+      <div class="form-success" id="form-success">
+        <div class="form-success-icon">✅</div>
+        <h3>Mensagem enviada!</h3>
+        <p>Obrigado pelo contato. Nossa equipe retornará em breve pelo WhatsApp ou e-mail informado.</p>
+      </div>
+      <div class="form-contact-alt">
+        <p>Prefere falar agora? Entre em contato diretamente:</p>
+        <div class="wa-links">
+          <a href="https://wa.me/5535991911624" class="wa-btn" target="_blank">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            (35) 99191-1624
+          </a>
+          <a href="https://wa.me/5535991910441" class="wa-btn" target="_blank">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            (35) 99191-0441
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato">
+  <div class="contato-inner">
+    <span class="section-label" style="color:var(--blue-light)">Localização & Contato</span>
+    <h2 class="section-title light">Fale com a Results</h2>
+    <div class="divider"></div>
+    <p class="section-desc light">Atendimento 100% online para todo o Brasil.</p>
+    <div class="contato-grid">
+      <div class="contato-item">
+        <div class="contato-item-icon">📍</div>
+        <h4>Sede</h4>
+        <p>Santa Rita do Sapucaí<br>Sul de Minas Gerais</p>
+      </div>
+      <div class="contato-item">
+        <div class="contato-item-icon">✉️</div>
+        <h4>E-mail</h4>
+        <a href="mailto:denilson@resultsconsultoria.com.br">denilson@resultsconsultoria.com.br</a>
+      </div>
+      <div class="contato-item">
+        <div class="contato-item-icon">📱</div>
+        <h4>WhatsApp</h4>
+        <a href="https://wa.me/5535991911624">(35) 99191-1624</a><br>
+        <a href="https://wa.me/5535991910441">(35) 99191-0441</a>
+      </div>
+      <div class="contato-item">
+        <div class="contato-item-icon">🌐</div>
+        <h4>Atendimento</h4>
+        <p>Todo o Brasil<br>100% Online</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Results Contadores Associados · Todos os direitos reservados</p>
+  <a href="mailto:denilson@resultsconsultoria.com.br">denilson@resultsconsultoria.com.br</a>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const links = document.querySelector('.nav-links');
+    const cta = document.querySelector('.nav-cta');
+    if (links.style.display === 'flex') {
+      links.style.display = 'none';
+      if (cta) cta.style.display = 'none';
+    } else {
+      links.style.cssText = 'display:flex;flex-direction:column;position:absolute;top:70px;left:0;right:0;background:rgba(10,31,68,0.98);padding:24px 5%;gap:20px;';
+      if (cta) { cta.style.cssText = 'display:block;position:absolute;top:70px;left:0;right:0;text-align:center;padding:12px;background:var(--blue);'; }
+    }
+  }
+
+  function enviarFormulario() {
+    const nome = document.getElementById('f-nome').value.trim();
+    const tel = document.getElementById('f-tel').value.trim();
+    const email = document.getElementById('f-email').value.trim();
+
+    if (!nome || !tel || !email) {
+      alert('Por favor, preencha Nome, Telefone e E-mail.');
+      return;
+    }
+
+    const empresa = document.getElementById('f-empresa').value;
+    const servico = document.getElementById('f-servico').value;
+    const msg = document.getElementById('f-msg').value;
+
+    const texto = `*Novo contato pelo site Results*\n\n*Nome:* ${nome}\n*Empresa:* ${empresa || 'Não informado'}\n*Telefone:* ${tel}\n*Email:* ${email}\n*Serviço:* ${servico || 'Não selecionado'}\n*Mensagem:* ${msg || 'Sem mensagem'}`;
+
+    // Abre WhatsApp com os dados
+    const waUrl = `https://wa.me/5535991911624?text=${encodeURIComponent(texto)}`;
+    window.open(waUrl, '_blank');
+
+    // Também abre email
+    const mailUrl = `mailto:denilson@resultsconsultoria.com.br?subject=Novo contato pelo site - ${nome}&body=${encodeURIComponent(texto.replace(/\*/g, ''))}`;
+    setTimeout(() => { window.location.href = mailUrl; }, 800);
+
+    document.getElementById('form-body').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+  }
+
+  // Smooth nav highlight
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.getAttribute('id');
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--blue-light)' : '';
+    });
+  });
+</script>
+</body>
+</html>
